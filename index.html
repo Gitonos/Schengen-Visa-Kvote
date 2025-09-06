@@ -11,12 +11,19 @@
             --body-gradient-end: #800080;
             --panel-gradient-start: rgba(255, 255, 255, 0.2);
             --panel-gradient-end: rgba(255, 255, 255, 0.4);
+            --line-color-1: #ff0000;
+            --line-color-2: #00ff00;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             overflow: hidden;
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
             background: linear-gradient(135deg, var(--body-gradient-start), var(--body-gradient-end));
             background-size: 200% 200%;
             animation: body-gradient-animate 20s ease-in-out infinite;
@@ -31,20 +38,30 @@
 
         /* Abstrakt linjebakgrunn animasjon */
         @keyframes abstract-lines {
-            0% { background-position: 0 0; }
-            100% { background-position: 100% 100%; }
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(100px, 100px) rotate(360deg); }
         }
-        .abstract-background {
+        
+        .abstract-background::before,
+        .abstract-background::after {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             opacity: 0.5;
-            background-image: linear-gradient(to right, rgba(255,0,0,0.5) 1px, transparent 1px), 
-                              linear-gradient(to bottom, rgba(128,0,128,0.5) 1px, transparent 1px);
-            background-size: 20px 20px;
-            animation: abstract-lines 40s linear infinite;
+            background-size: 50px 50px;
+            animation: abstract-lines 40s linear infinite alternate;
+        }
+        .abstract-background::before {
+            background-image: linear-gradient(to right, var(--line-color-1) 1px, transparent 1px), 
+                              linear-gradient(to bottom, var(--line-color-2) 1px, transparent 1px);
+        }
+        .abstract-background::after {
+            background-image: linear-gradient(135deg, transparent 49%, var(--line-color-1) 49%, var(--line-color-1) 51%, transparent 51%),
+                              linear-gradient(45deg, transparent 49%, var(--line-color-2) 49%, var(--line-color-2) 51%, transparent 51%);
+            animation: abstract-lines 50s linear infinite reverse;
         }
 
         /* Bakgrunnspanel med animert gradient og opasitet */
@@ -90,47 +107,9 @@
             box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
             outline: none;
         }
-
-        /* Media queries for responsivitet og animasjonsfart */
-        /* Standard for mobile */
-        body {
-            animation-duration: 30s;
-        }
-        .panel-animate {
-            animation-duration: 25s;
-        }
-        .abstract-background {
-            animation-duration: 60s;
-        }
-        
-        /* For nettbrett og mindre skjermer */
-        @media (min-width: 640px) {
-            body {
-                animation-duration: 40s;
-            }
-            .panel-animate {
-                animation-duration: 30s;
-            }
-            .abstract-background {
-                animation-duration: 80s;
-            }
-        }
-        
-        /* For desktop og større skjermer */
-        @media (min-width: 1024px) {
-            body {
-                animation-duration: 50s;
-            }
-            .panel-animate {
-                animation-duration: 35s;
-            }
-            .abstract-background {
-                animation-duration: 100s;
-            }
-        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="min-h-screen">
     
     <!-- Abstrakt linjebakgrunn -->
     <div class="abstract-background"></div>
@@ -284,52 +263,38 @@
                 messageDiv.className = `mb-4 p-3 rounded-lg text-center font-medium ${classes}`;
             }
 
+            // Funksjon for å generere tilfeldige farger fra et definert spektrum
             function getRandomColor() {
-                const letters = '0123456789ABCDEF';
-                let color = '#';
-                for (let i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
-                }
-                return color;
+                const colors = ['#FF0000', '#00FF00', '#0000FF', '#8A2BE2', '#FFFF00', '#FFA500', '#556B2F'];
+                return colors[Math.floor(Math.random() * colors.length)];
             }
 
-            function setRandomGradients() {
+            // Funksjon for å oppdatere animasjonene dynamisk
+            function updateRandomAnimations() {
                 const bodyGradientStart = getRandomColor();
                 const bodyGradientEnd = getRandomColor();
+                const line1Color = getRandomColor();
+                const line2Color = getRandomColor();
+
+                document.documentElement.style.setProperty('--body-gradient-start', bodyGradientStart);
+                document.documentElement.style.setProperty('--body-gradient-end', bodyGradientEnd);
+                document.documentElement.style.setProperty('--line-color-1', line1Color);
+                document.documentElement.style.setProperty('--line-color-2', line2Color);
+
                 const panelGradientStart = `rgba(${parseInt(getRandomColor().slice(1, 3), 16)}, ${parseInt(getRandomColor().slice(3, 5), 16)}, ${parseInt(getRandomColor().slice(5, 7), 16)}, 0.2)`;
                 const panelGradientEnd = `rgba(${parseInt(getRandomColor().slice(1, 3), 16)}, ${parseInt(getRandomColor().slice(3, 5), 16)}, ${parseInt(getRandomColor().slice(5, 7), 16)}, 0.4)`;
                 
-                document.documentElement.style.setProperty('--body-gradient-start', bodyGradientStart);
-                document.documentElement.style.setProperty('--body-gradient-end', bodyGradientEnd);
                 document.documentElement.style.setProperty('--panel-gradient-start', panelGradientStart);
                 document.documentElement.style.setProperty('--panel-gradient-end', panelGradientEnd);
-
-                const backgroundColors = [
-                    '#FF0000', '#008000', '#008000', '#800080', '#ADD8E6', '#0000FF', '#556B2F'
-                ];
-                let gradientString = 'linear-gradient(45deg, ';
-                for(let i = 0; i < backgroundColors.length; i++) {
-                    gradientString += `${backgroundColors[i]} ${Math.random() * 100}%, `;
-                }
-                gradientString = gradientString.slice(0, -2) + ')';
-                body.style.backgroundImage = gradientString;
-                
-                const abstractColors = [
-                    '#FF0000', '#00FF00', '#800080', '#FFFF00', '#FFA500'
-                ];
-                const abstractLines = document.querySelector('.abstract-background');
-                let lineGradientString = 'linear-gradient(to right, ';
-                for (let i = 0; i < abstractColors.length; i++) {
-                    lineGradientString += `rgba(${parseInt(abstractColors[i].slice(1, 3), 16)}, ${parseInt(abstractColors[i].slice(3, 5), 16)}, ${parseInt(abstractColors[i].slice(5, 7), 16)}, 0.5) ${Math.random() * 20}px, transparent ${Math.random() * 20}px), `;
-                }
-                lineGradientString = lineGradientString.slice(0, -2);
-                abstractLines.style.backgroundImage = lineGradientString;
             }
 
-            setRandomGradients();
-            setInterval(setRandomGradients, 20000); 
+            // Oppdater animasjonene hvert 3. sekund som du ba om
+            updateRandomAnimations();
+            setInterval(updateRandomAnimations, 3000); 
         });
     </script>
 </body>
 </html>
+
+
 
