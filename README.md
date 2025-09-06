@@ -8,3 +8,8 @@ for innreise og hjemreise
 og kvote dager for oppholds tid
 
 --------
+
+Gemini Brukte 
+
+2 Minutter på og Utvikle Appen
+for dette Innholdet
