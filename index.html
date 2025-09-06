@@ -8,7 +8,40 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background: linear-gradient(to bottom right, #e0ffe0, #c0ffc0);
+        }
+
+        /* Definerer @keyframes for bobleanimasjon på knappen */
+        @keyframes bubble {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(100, 220, 100, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(100, 220, 100, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(100, 220, 100, 0);
+            }
+        }
+
+        /* Anvend animasjonen på knappen */
+        .animate-bubble-effect {
+            animation: bubble 2s infinite;
+        }
+
+        /* Legger til overgangseffekter for alle elementer */
+        .transition-all-slow {
+            transition: all 0.7s ease-in-out;
+        }
+
+        /* Egendefinert styling for å forbedre utseendet på inndatafelter og valgbokser */
+        input:focus, select:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+            outline: none;
         }
     </style>
 </head>
@@ -22,42 +55,42 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div>
                 <label for="entryDate" class="block text-sm font-medium text-gray-700 mb-1">Innreisedato</label>
-                <input type="date" id="entryDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border">
+                <input type="date" id="entryDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border transition-all-slow">
             </div>
             <div>
                 <label for="exitDate" class="block text-sm font-medium text-gray-700 mb-1">Hjemreisedato</label>
-                <input type="date" id="exitDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border">
+                <input type="date" id="exitDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border transition-all-slow">
             </div>
         </div>
         
         <!-- Landvelger -->
         <div class="mb-6">
             <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Velg et Schengen-land</label>
-            <select id="country" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border">
+            <select id="country" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border transition-all-slow">
                 <!-- Populeres av JS -->
             </select>
         </div>
 
-        <button id="calculateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">
+        <button id="calculateBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 animate-bubble-effect">
             Beregn dager
         </button>
 
         <div id="results" class="mt-6 hidden">
             <!-- Meldinger for feil eller suksess -->
-            <div id="message" class="mb-4 p-3 rounded-lg text-center font-medium"></div>
+            <div id="message" class="mb-4 p-3 rounded-lg text-center font-medium transition-all-slow"></div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                 <div>
                     <p class="text-xs text-gray-500">Dager brukt</p>
-                    <p id="daysUsed" class="text-3xl font-bold text-gray-800"></p>
+                    <p id="daysUsed" class="text-3xl font-bold text-gray-800 transition-all-slow"></p>
                 </div>
                 <div>
                     <p class="text-xs text-gray-500">Dager igjen</p>
-                    <p id="daysRemaining" class="text-3xl font-bold text-gray-800"></p>
+                    <p id="daysRemaining" class="text-3xl font-bold text-gray-800 transition-all-slow"></p>
                 </div>
                 <div>
                     <p class="text-xs text-gray-500">Syklus per uke</p>
-                    <p id="weeklyCycle" class="text-3xl font-bold text-gray-800"></p>
+                    <p id="weeklyCycle" class="text-3xl font-bold text-gray-800 transition-all-slow"></p>
                 </div>
             </div>
 
@@ -65,8 +98,8 @@
             <div class="mt-6">
                 <p class="text-sm font-medium text-gray-700 mb-2">Visuell kvote</p>
                 <div class="w-full bg-gray-200 rounded-full h-4 relative">
-                    <div id="quotaBar" class="h-4 bg-green-500 rounded-full transition-all duration-500" style="width: 0%;"></div>
-                    <span id="quotaPercentage" class="absolute top-0 right-2 text-xs font-bold text-gray-800 leading-4">0%</span>
+                    <div id="quotaBar" class="h-4 bg-green-500 rounded-full transition-all-slow" style="width: 0%;"></div>
+                    <span id="quotaPercentage" class="absolute top-0 right-2 text-xs font-bold text-gray-800 leading-4 transition-all-slow">0%</span>
                 </div>
             </div>
 
@@ -74,7 +107,7 @@
             <div class="mt-6">
                 <p class="text-sm font-medium text-gray-700 mb-2">Reisetidslinje</p>
                 <div id="timelineContainer" class="w-full h-8 bg-gray-200 rounded-full flex items-center p-1 relative">
-                    <div id="timelineSegment" class="bg-blue-500 rounded-full h-6 transition-all duration-500"></div>
+                    <div id="timelineSegment" class="bg-green-500 rounded-full h-6 transition-all-slow"></div>
                 </div>
             </div>
         </div>
@@ -82,7 +115,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Referanser til DOM-elementer
             const entryDateInput = document.getElementById('entryDate');
             const exitDateInput = document.getElementById('exitDate');
             const countrySelect = document.getElementById('country');
@@ -96,7 +128,6 @@
             const quotaPercentage = document.getElementById('quotaPercentage');
             const timelineSegment = document.getElementById('timelineSegment');
 
-            // Liste over Schengen-land for dropdown
             const schengenCountries = [
                 'Østerrike', 'Belgia', 'Kroatia', 'Tsjekkia', 'Danmark', 'Estland', 'Finland', 'Frankrike', 'Tyskland',
                 'Hellas', 'Ungarn', 'Island', 'Italia', 'Latvia', 'Liechtenstein', 'Litauen', 'Luxembourg',
@@ -104,7 +135,6 @@
                 'Sverige', 'Sveits'
             ];
             
-            // Fyller land-dropdownen
             schengenCountries.forEach(country => {
                 const option = document.createElement('option');
                 option.value = country;
@@ -112,12 +142,10 @@
                 countrySelect.appendChild(option);
             });
 
-            // Hendelselytter for beregningsknappen
             calculateBtn.addEventListener('click', () => {
                 const entryDate = new Date(entryDateInput.value);
                 const exitDate = new Date(exitDateInput.value);
 
-                // Validerer at datoene er gyldige og i riktig rekkefølge
                 if (isNaN(entryDate.getTime()) || isNaN(exitDate.getTime())) {
                     showMessage("Vennligst fyll ut begge datoene.", "bg-red-100 text-red-700");
                     return;
@@ -128,30 +156,24 @@
                     return;
                 }
 
-                // Viser resultatseksjonen
                 resultsDiv.classList.remove('hidden');
 
-                // Beregner antall dager
                 const oneDay = 1000 * 60 * 60 * 24;
                 const timeDifference = exitDate.getTime() - entryDate.getTime();
                 const daysUsed = Math.ceil(timeDifference / oneDay);
                 const totalDays = 90;
                 const daysRemaining = totalDays - daysUsed;
                 
-                // Beregner kvote og ukentlig syklus
                 const quotaPercentageValue = (daysUsed / totalDays) * 100;
                 const weeklyCycle = (daysUsed / totalDays) * 7;
 
-                // Oppdaterer DOM med beregningsresultatene
                 daysUsedSpan.textContent = daysUsed;
                 daysRemainingSpan.textContent = daysRemaining < 0 ? 0 : daysRemaining;
                 weeklyCycleSpan.textContent = weeklyCycle.toFixed(2);
 
-                // Oppdaterer kvotebaren
                 quotaBar.style.width = `${Math.min(100, quotaPercentageValue)}%`;
                 quotaPercentage.textContent = `${Math.min(100, quotaPercentageValue).toFixed(0)}%`;
                 
-                // Endrer fargen på baren basert på bruk
                 if (quotaPercentageValue > 90) {
                     quotaBar.classList.remove('bg-green-500', 'bg-yellow-500');
                     quotaBar.classList.add('bg-red-500');
@@ -163,22 +185,19 @@
                     quotaBar.classList.add('bg-green-500');
                 }
 
-                // Oppdaterer tidslinjen
-                const timelinePercentage = (daysUsed / 90) * 100;
-                timelineSegment.style.width = `${Math.min(100, timelinePercentage)}%`;
+                timelineSegment.style.width = `${Math.min(100, quotaPercentageValue)}%`;
                 
-                // Viser en suksessmelding
                 showMessage("Beregning fullført.", "bg-green-100 text-green-700");
             });
 
-            // Hjelpefunksjon for å vise meldinger
             function showMessage(text, classes) {
                 messageDiv.textContent = text;
                 messageDiv.className = `mb-4 p-3 rounded-lg text-center font-medium ${classes}`;
             }
         });
     </script>
-
 </body>
 </html>
+
+
 
