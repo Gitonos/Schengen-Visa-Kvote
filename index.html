@@ -23,20 +23,17 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 1rem;
             background: linear-gradient(135deg, var(--body-gradient-start), var(--body-gradient-end));
             background-size: 200% 200%;
             animation: body-gradient-animate 20s ease-in-out infinite;
         }
 
-        /* Animerer bakgrunnsgradienten */
         @keyframes body-gradient-animate {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Abstrakt linjebakgrunn animasjon */
         @keyframes abstract-lines {
             0% { transform: translate(0, 0) rotate(0deg); }
             100% { transform: translate(100px, 100px) rotate(360deg); }
@@ -64,7 +61,6 @@
             animation: abstract-lines 50s linear infinite reverse;
         }
 
-        /* Bakgrunnspanel med animert gradient og opasitet */
         @keyframes panel-gradient-animate {
             0% { background-position: 0% 0%; }
             100% { background-position: 100% 100%; }
@@ -76,7 +72,6 @@
             animation: panel-gradient-animate 15s ease-in-out infinite alternate;
         }
 
-        /* Knapp med boble animasjon */
         @keyframes bubble {
             0% {
                 transform: scale(1);
@@ -96,45 +91,74 @@
             animation: bubble 2s infinite;
         }
 
-        /* Overganger for jevnere effekter */
         .transition-all-slow {
             transition: all 0.7s ease-in-out;
         }
 
-        /* Egendefinert styling for å forbedre utseendet på inndatafelter og valgbokser */
         input:focus, select:focus {
             border-color: #4CAF50;
             box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
             outline: none;
         }
+
+        .responsive-panel {
+            width: 95%;
+            padding: 1rem;
+            max-width: 500px;
+        }
+        
+        @media (min-width: 640px) {
+            .responsive-panel {
+                width: 75%;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .responsive-panel {
+                width: 50%;
+                padding: 2rem;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen">
     
-    <!-- Abstrakt linjebakgrunn -->
     <div class="abstract-background"></div>
 
-    <div class="rounded-xl shadow-lg p-6 max-w-sm w-full relative z-10 panel-animate">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Schengen Kvote Barometer</h1>
-        <p class="text-sm text-yellow-400 mb-6 text-center">Beregne visumkvoten din og visualiser reisedagene dine.</p>
+    <div class="rounded-xl shadow-lg relative z-10 panel-animate responsive-panel">
+        <h1 class="text-3xl font-bold text-black mb-2 text-center">Schengen Kvote Barometer</h1>
+        <p class="text-sm text-black mb-6 text-center">Beregne visumkvoten din og visualiser reisedagene dine.</p>
 
-        <!-- Inndatafeltene for reisedatoer -->
         <div class="grid grid-cols-1 gap-4 mb-6">
             <div>
-                <label for="entryDate" class="block text-sm font-medium text-gray-700 mb-1">Innreisedato</label>
+                <label for="originCountry" class="block text-sm font-medium text-black mb-1">Opprinnelsesland (visum)</label>
+                <select id="originCountry" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border transition-all-slow">
+                </select>
+            </div>
+            <div>
+                <label for="visaQuota" class="block text-sm font-medium text-black mb-1">Visumkvote (dager)</label>
+                <select id="visaQuota" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border transition-all-slow">
+                    <option value="90">90 dager</option>
+                    <option value="30">30 dager</option>
+                    <option value="60">60 dager</option>
+                    <option value="120">120 dager</option>
+                    <option value="180">180 dager</option>
+                </select>
+            </div>
+            <div>
+                <label for="entryDate" class="block text-sm font-medium text-black mb-1">Innreisedato</label>
                 <input type="date" id="entryDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border transition-all-slow">
             </div>
             <div>
-                <label for="exitDate" class="block text-sm font-medium text-gray-700 mb-1">Hjemreisedato</label>
+                <label for="exitDate" class="block text-sm font-medium text-black mb-1">Hjemreisedato</label>
                 <input type="date" id="exitDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border transition-all-slow">
             </div>
         </div>
         
-        <!-- Landvelger -->
         <div class="mb-6">
-            <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Velg et Schengen-land</label>
+            <label for="country" class="block text-sm font-medium text-black mb-1">Velg et Schengen-land</label>
             <select id="country" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border transition-all-slow">
-                <!-- Populeres av JS -->
             </select>
         </div>
 
@@ -143,36 +167,33 @@
         </button>
 
         <div id="results" class="mt-6 hidden">
-            <!-- Meldinger for feil eller suksess -->
             <div id="message" class="mb-4 p-3 rounded-lg text-center font-medium transition-all-slow"></div>
 
             <div class="grid grid-cols-1 gap-4 text-center">
                 <div>
-                    <p class="text-xs text-gray-500">Dager brukt</p>
-                    <p id="daysUsed" class="text-3xl font-bold text-gray-800 transition-all-slow"></p>
+                    <p class="text-xs text-black">Dager brukt</p>
+                    <p id="daysUsed" class="text-3xl font-bold text-black transition-all-slow"></p>
                 </div>
                 <div>
-                    <p class="text-xs text-gray-500">Dager igjen</p>
-                    <p id="daysRemaining" class="text-3xl font-bold text-gray-800 transition-all-slow"></p>
+                    <p class="text-xs text-black">Dager igjen</p>
+                    <p id="daysRemaining" class="text-3xl font-bold text-black transition-all-slow"></p>
                 </div>
                 <div>
-                    <p class="text-xs text-gray-500">Syklus per uke</p>
-                    <p id="weeklyCycle" class="text-3xl font-bold text-gray-800 transition-all-slow"></p>
+                    <p class="text-xs text-black">Syklus per uke</p>
+                    <p id="weeklyCycle" class="text-3xl font-bold text-black transition-all-slow"></p>
                 </div>
             </div>
 
-            <!-- Kvote barometer -->
             <div class="mt-6">
-                <p class="text-sm font-medium text-gray-700 mb-2">Visuell kvote</p>
+                <p class="text-sm font-medium text-black mb-2">Visuell kvote</p>
                 <div class="w-full bg-gray-200 rounded-full h-4 relative">
                     <div id="quotaBar" class="h-4 bg-green-500 rounded-full transition-all-slow" style="width: 0%;"></div>
-                    <span id="quotaPercentage" class="absolute top-0 right-2 text-xs font-bold text-gray-800 leading-4 transition-all-slow">0%</span>
+                    <span id="quotaPercentage" class="absolute top-0 right-2 text-xs font-bold text-black leading-4 transition-all-slow">0%</span>
                 </div>
             </div>
 
-            <!-- Tidslinje for reise -->
             <div class="mt-6">
-                <p class="text-sm font-medium text-gray-700 mb-2">Reisetidslinje</p>
+                <p class="text-sm font-medium text-black mb-2">Reisetidslinje</p>
                 <div id="timelineContainer" class="w-full h-8 bg-gray-200 rounded-full flex items-center p-1 relative">
                     <div id="timelineSegment" class="bg-green-500 rounded-full h-6 transition-all-slow"></div>
                 </div>
@@ -185,6 +206,8 @@
             const entryDateInput = document.getElementById('entryDate');
             const exitDateInput = document.getElementById('exitDate');
             const countrySelect = document.getElementById('country');
+            const originCountrySelect = document.getElementById('originCountry'); 
+            const visaQuotaSelect = document.getElementById('visaQuota');
             const calculateBtn = document.getElementById('calculateBtn');
             const resultsDiv = document.getElementById('results');
             const messageDiv = document.getElementById('message');
@@ -194,7 +217,6 @@
             const quotaBar = document.getElementById('quotaBar');
             const quotaPercentage = document.getElementById('quotaPercentage');
             const timelineSegment = document.getElementById('timelineSegment');
-            const body = document.body;
 
             const schengenCountries = [
                 'Østerrike', 'Belgia', 'Kroatia', 'Tsjekkia', 'Danmark', 'Estland', 'Finland', 'Frankrike', 'Tyskland',
@@ -204,15 +226,21 @@
             ];
             
             schengenCountries.forEach(country => {
-                const option = document.createElement('option');
-                option.value = country;
-                option.textContent = country;
-                countrySelect.appendChild(option);
+                const option1 = document.createElement('option');
+                option1.value = country;
+                option1.textContent = country;
+                countrySelect.appendChild(option1);
+
+                const option2 = document.createElement('option');
+                option2.value = country;
+                option2.textContent = country;
+                originCountrySelect.appendChild(option2);
             });
 
             calculateBtn.addEventListener('click', () => {
                 const entryDate = new Date(entryDateInput.value);
                 const exitDate = new Date(exitDateInput.value);
+                const totalDays = parseInt(visaQuotaSelect.value, 10);
 
                 if (isNaN(entryDate.getTime()) || isNaN(exitDate.getTime())) {
                     showMessage("Vennligst fyll ut begge datoene.", "bg-red-100 text-red-700");
@@ -229,7 +257,6 @@
                 const oneDay = 1000 * 60 * 60 * 24;
                 const timeDifference = exitDate.getTime() - entryDate.getTime();
                 const daysUsed = Math.ceil(timeDifference / oneDay);
-                const totalDays = 90;
                 const daysRemaining = totalDays - daysUsed;
                 
                 const quotaPercentageValue = (daysUsed / totalDays) * 100;
@@ -263,13 +290,11 @@
                 messageDiv.className = `mb-4 p-3 rounded-lg text-center font-medium ${classes}`;
             }
 
-            // Funksjon for å generere tilfeldige farger fra et definert spektrum
             function getRandomColor() {
                 const colors = ['#FF0000', '#00FF00', '#0000FF', '#8A2BE2', '#FFFF00', '#FFA500', '#556B2F'];
                 return colors[Math.floor(Math.random() * colors.length)];
             }
 
-            // Funksjon for å oppdatere animasjonene dynamisk
             function updateRandomAnimations() {
                 const bodyGradientStart = getRandomColor();
                 const bodyGradientEnd = getRandomColor();
@@ -288,13 +313,13 @@
                 document.documentElement.style.setProperty('--panel-gradient-end', panelGradientEnd);
             }
 
-            // Oppdater animasjonene hvert 3. sekund som du ba om
             updateRandomAnimations();
             setInterval(updateRandomAnimations, 3000); 
         });
     </script>
 </body>
 </html>
+
 
 
 
