@@ -13,3 +13,7 @@ Gemini Brukte
 
 2 Minutter på og Utvikle Appen
 for dette Innholdet
+
+-----------
+
+link : https://gitonos.github.io/Schengen-Visum-Kvote/
